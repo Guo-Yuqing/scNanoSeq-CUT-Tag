@@ -14,23 +14,23 @@ all_L1_fa=$workdir/T2T_fulllengthL1HS.trans.chrm13v2.0.fasta
 
 
 do_get_fasta(){
-cd $workdir
 
-less $T2T_repeat_ref|grep LINE| \
-sort -k 1,1V -k 2,2n -k 3,3n |awk '{print $0"\t"$3-$2}' >T2T_repeat.LINE.sort.bed
-
-less T2T_repeat.LINE.sort.bed|grep L1HS>T2T_repeat.LINE.L1HS.sort.bed
-
-less T2T_fulllengthL1HS.chrm13v1.0.txt|grep -v CHROM|grep chr|cut -f 1,2,3|sort -k 1,1V -k 2,2n | \
-awk '{print $1"\t"$2-1000"\t"$3+1000"\t"$0}'| \
-bedtools intersect -a - -b T2T_repeat.LINE.L1HS.sort.bed -wo| \
-grep L1HS|awk '{if ($18>5500)print}'|cut -f 7,8,9,10,11,12,13,14,15,16,17 >${all_L1_bed}
-
-less ${all_L1_bed}|grep chrX|head -1 >${active_chrX_bed}
-
-
-bedtools getfasta -fi  $T2T_fa -bed ${active_chrX_bed} -fo ${active_chrX_fa}
-bedtools getfasta -fi  $T2T_fa -bed ${all_L1_bed} -fo ${all_L1_fa}
+	cd $workdir
+	
+	less $T2T_repeat_ref|grep LINE| \
+	sort -k 1,1V -k 2,2n -k 3,3n |awk '{print $0"\t"$3-$2}' >T2T_repeat.LINE.sort.bed
+	
+	less T2T_repeat.LINE.sort.bed|grep L1HS>T2T_repeat.LINE.L1HS.sort.bed
+	
+	less T2T_fulllengthL1HS.chrm13v1.0.txt|grep -v CHROM|grep chr|cut -f 1,2,3|sort -k 1,1V -k 2,2n | \
+	awk '{print $1"\t"$2-1000"\t"$3+1000"\t"$0}'| \
+	bedtools intersect -a - -b T2T_repeat.LINE.L1HS.sort.bed -wo| \
+	grep L1HS|awk '{if ($18>5500)print}'|cut -f 7,8,9,10,11,12,13,14,15,16,17 >${all_L1_bed}
+	
+	less ${all_L1_bed}|grep chrX|head -1 >${active_chrX_bed}
+	
+	bedtools getfasta -fi  $T2T_fa -bed ${active_chrX_bed} -fo ${active_chrX_fa}
+	bedtools getfasta -fi  $T2T_fa -bed ${all_L1_bed} -fo ${all_L1_fa}
 
 
 }
@@ -58,7 +58,7 @@ do_blast(){
 ##############################################################################################################################################################################################################################################################
 
 do_build_index_new(){
-fmt_downdir=$workdir/format/fmt_down_analysis
+    fmt_downdir=$workdir/format/fmt_down_analysis
     mkdir -p $fmt_downdir
     cd $fmt_downdir
 
@@ -75,7 +75,6 @@ fmt_downdir=$workdir/format/fmt_down_analysis
      ln -s $workdir/format/T2T_fulllength_L1HS.trans.chrm13v2.0.blast_info .
     less T2T_fulllength_L1HS.trans.chrm13v2.0.blast_info|grep -v '#'|awk '{if ($4>5000)print}'|cut -f1|sort -k 1,1V|uniq >true_blast_query
 
-
     end=$(less T2T_fulllength_L1HS.trans.chrm13v2.0.blast|wc -l)
     awk '$0=NR"\t"$0'  ${blast_file} | \
     grep Query=  >T2T_fulllength_L1HS.trans.chrm13v2.0.blast_index_tmp
@@ -87,7 +86,6 @@ fmt_downdir=$workdir/format/fmt_down_analysis
     awk -vOFS='\t' '{print $1,$4,$2,$3}' |sed 's/Query=//g'|  \
     awk 'NR==FNR{a[$1]=1}NR!=FNR{if($3 in a)print $0}' true_blast_query - |\
     awk '{print $1"\t"$2"\t""Query=""\t"$3}'|awk '{if ($2-$1>10)print}' >T2T_fulllength_L1HS.trans.chrm13v2.0.blast_index
-    
     
     less T2T_fulllength_L1HS.trans.chrm13v2.0.blast_index|while read line
     do
