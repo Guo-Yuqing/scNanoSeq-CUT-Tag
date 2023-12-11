@@ -81,16 +81,16 @@ scNanoSeq-CUT&Tag is a streamlined method by adapting a modified CUT&Tag protoco
 # scNanoSeq-CUT&Tag pipeline
 ## 01_preprocess
 These scripts in the 01_preprocess folder were used to demultiplex raw sequence data into single cell files according to the single-cell barcodes sequence and the single cell reads were next mapped to reference genome of human (hg38) and mouse (mm10).
-### Input
-pass.fastq.gz is the raw sequencing data from Nanopore platform
-samdir example:
-```
-raw_fastq_dir  pass.fastq.gz
-```
-### Usage
+### Step1: demultiplex
+
 ```
 sh S01_pkubatch_01_demultiplex.sh
 ```
+```
+#samdir example
+absolute_directiry_of_pass.fastq.gz    pass.fastq.gz
+```
+pass.fastq.gz is the raw sequencing data from Nanopore platform
 
 
 
