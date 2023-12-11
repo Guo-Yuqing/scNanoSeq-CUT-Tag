@@ -1,9 +1,9 @@
 #!/bin/env Rscripts
-args = commandArgs(T)
+args <- commandArgs(T)
 
-prefix = args[1]
-rep = args[2]
-cell_num = args[3]
+prefix <- args[1]
+rep <- args[2]
+cell_num <- args[3]
 
 ###################################################################################
 library(GenomeInfoDb)
@@ -13,8 +13,8 @@ library(reshape2)
 library(tidyr)
 addArchRGenome("hg38")
 ###################################################################################
-input_name=paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"K.bed.gz")
-inputFiles=scanTabix(input_name)
+input_name <- paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"K.bed.gz")
+inputFiles <- scanTabix(input_name)
 names(inputFiles) <- paste0("LOOP_",prefix)
 
 ArrowFiles <- createArrowFiles(
@@ -33,10 +33,10 @@ proj1 <- ArchRProject(
   copyArrows = TRUE
 )
 
-tmp_name=paste0("LOOP_",prefix,"#")
-tmp=gsub(tmp_name,'',proj1$cellNames)
-celltype=sapply(strsplit(tmp,'_'),'[',1)
-proj1$celltype=celltype
+tmp_name <- paste0("LOOP_",prefix,"#")
+tmp <- gsub(tmp_name,'',proj1$cellNames)
+celltype <- sapply(strsplit(tmp,'_'),'[',1)
+proj1$celltype <- celltype
 
 
 p1 <- plotGroups(
@@ -47,20 +47,8 @@ p1 <- plotGroups(
     plotAs = "ridges",baseSize = 10
    )
 
-p1_name=paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"_TSSEnrichment.pdf")
+p1_name <- paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"_TSSEnrichment.pdf")
 plotPDF(p1, name = p1_name, ArchRProj = proj1, addDOC = FALSE, width = 5, height = 5)
-
-
-p1=plotTSSEnrichment(ArchRProj = proj1[proj1$celltype=='293T',],groupBy = "celltype")
-p2=plotTSSEnrichment(ArchRProj = proj1[proj1$celltype=='GM12878',],groupBy = "celltype")
-p3=plotTSSEnrichment(ArchRProj = proj1[proj1$celltype=='H9',],groupBy = "celltype")
-p4=plotTSSEnrichment(ArchRProj = proj1[proj1$celltype=='HFF1',],groupBy = "celltype")
-p5=plotTSSEnrichment(ArchRProj = proj1[proj1$celltype=='K562',],groupBy = "celltype")
-p6=plotTSSEnrichment(ArchRProj = proj1[proj1$celltype=='HG002',],groupBy = "celltype")
-
-p2_name=paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"_TSSEnrichment_eachsample.pdf")
-plotPDF(p1,p2,p3,p4,p5,p6, name = p2_name, ArchRProj = proj1, addDOC = FALSE, width = 5, height = 5)
-
 
 proj1 <- addIterativeLSI(
     ArchRProj = proj1,
@@ -86,7 +74,7 @@ proj1 <- addUMAP(
     force = T,verbose =F
 )
 
-color = c("#E41A1C","#0072B5FF",
+color <- c("#E41A1C","#0072B5FF",
           "#4DAF4A",
           "#B45DC2",
           "#FF7F00",
@@ -109,15 +97,15 @@ p2<- plotEmbedding(ArchRProj = proj1,
                     size = 2)
 
 
-p3_name=paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"_umap.pdf")
+p3_name <- paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"_umap.pdf")
 plotPDF(p1,p2, name = p3_name, ArchRProj = proj1, addDOC = FALSE, width = 5, height = 5)
 
 
 saveArchRProject(ArchRProj = proj1, outputDirectory = "Save-Proj1", load = FALSE)
 
 
-cluster_data=as.data.frame(table(proj1$Clusters,proj1$celltype))
-data=spread(cluster_data, Var2,Freq)
-xls_name=paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"_clustering_result.xls")
+cluster_data <- as.data.frame(table(proj1$Clusters,proj1$celltype))
+data <- spread(cluster_data, Var2,Freq)
+xls_name <- paste0(prefix,"_6celllines.Rep",rep,"_readsnum",cell_num,"_clustering_result.xls")
 write.table(data,xls_name,quote = F,sep = '\t',row.names = F)
 
