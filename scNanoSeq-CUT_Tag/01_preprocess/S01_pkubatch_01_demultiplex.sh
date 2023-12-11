@@ -18,9 +18,6 @@ echo "#!/bin/bash
 sh $scripts  $sample $batch
 " > $run_log/${batch}_01_demultiplex.sh
 
-
-
-
 chmod +x $run_log/${batch}_01_demultiplex.sh
 
 pkubatch \
@@ -31,7 +28,5 @@ pkubatch \
     --qos=tangfuchoucnl \
     -o $run_log/${batch}_01_demultiplex.o -e $run_log/${batch}_01_demultiplex.e \
     $run_log/${batch}_01_demultiplex.sh
-
-
 
 done
