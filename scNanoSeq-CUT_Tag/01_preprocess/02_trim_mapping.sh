@@ -8,11 +8,10 @@ batch=$2
 prefix=$3
 
 demultiplex_dir=$workdir/01_demultiplex/$batch
-######################################################################################################################################################
 QC_dir=$workdir/02_trim/$batch
 align_dir=$workdir/03_alignment/$batch
 mkdir -p $QC_dir $align_dir
-
+######################################################################################################################################################
 ref=$rootdir/reference/minimap2/genome/Homo_sapiens.GRCh38.dna.primary_assembly.mmi
 ref_genome_fa=$rootdir/reference/minimap2/genome/Homo_sapiens.GRCh38.dna.primary_assembly.fa
 NanoFilt=$rootdir/software/miniconda3/bin/NanoFilt
@@ -22,7 +21,6 @@ minimap2=$rootdir/software/minimap2-2.26_x64-linux/minimap2
 samtools=$rootdir/software/miniconda3/bin/samtools
 cuteSV=$rootdir/software/miniconda3/envs/DNAloop/bin/cuteSV
 scripts=$workdir/run_scripts/02_trim_mapping.sh
-
 
 do_QC(){
 # QC and Trim
@@ -65,7 +63,7 @@ cp $scripts .
 ####remove supplementary mapping
 $minimap2 -t 8 \
         --MD \
-		-ax map-ont \
+	-ax map-ont \
          ${ref} \
          $QC_dir/${cell}/${prefix}_${cell}_trimmed.fastq \
        |  $samtools view  -ShuF 2308 -q 30 -|\
@@ -100,10 +98,8 @@ else
     rm -f $align_dir/${prefix}_${cell}/${prefix}_${cell}_q30.bam
 fi
 
-
 cd $workdir
 }
-
 
 do_countStat(){
 demultiplex_dir=$workdir/01_demultiplex/$batch
@@ -129,13 +125,11 @@ Seq_data=$(printf "%.4f" `echo "scale=4;${total_base}/1000000000"|bc`)
 Mapped_Reads=$(cat ${align_dir}/${prefix}_${cell}/${prefix}_${cell}_MappedReads)
 Mapped_rmdup_Reads=$($samtools view -F2308 -c ${align_dir}/${prefix}_${cell}/${prefix}_${cell}_q30.rmdup.bam)
 
-
 Mapped_percent=$(printf "%.2f" `echo "scale=2;100*${Mapped_Reads}/${Q7_Reads}"|bc`)
 Mapped_rmdup_percent=$(printf "%.2f" `echo "scale=2;100*${Mapped_rmdup_Reads}/${Mapped_Reads}"|bc`)
 
 mt_rmdup_num=$(less ${align_dir}/${prefix}_${cell}/${prefix}_${cell}.rmdup_fragments|grep -w 'MT'|wc -l)
 mt_rmdup_pert=$(printf "%.4f" `echo "scale=4;100*${mt_rmdup_num}/${Mapped_rmdup_Reads}"|bc`)
-
 
 Coverage=$(less ${align_dir}/${prefix}_${cell}/${prefix}_${cell}.rmdup_fragments|awk '{print "chr"$1"\t"$2"\t"$3}'|mergeBed -i - |awk '{print $3-$2+1}'|awk '{sum +=$1}END{print sum}')
 Depth=$(printf "%.4f" `echo "scale=4;(${Mapped_Reads}*${Reads_median_length})/${Coverage}"|bc`)
@@ -149,7 +143,7 @@ echo -e ${prefix}"_"${cell}'\t'${Raw_Reads}'\t'${Q7_Reads}'\t'${Q7_Percent}'\t'$
 run(){
     do_QC
     do_mapping
-	do_countStat
+    do_countStat
 }
 run
 
