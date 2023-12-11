@@ -80,9 +80,8 @@ scNanoSeq-CUT&Tag is a streamlined method by adapting a modified CUT&Tag protoco
 ```
 # scNanoSeq-CUT&Tag pipeline
 ## 01_preprocess
-These scripts in the 01_preprocess folder were used to demultiplex raw sequence data into single cell files according to the single-cell barcodes sequence and the single cell reads were next mapped to reference genome of human (hg38) and mouse (mm10).
+These scripts in the `01_preprocess` folder were used to demultiplex raw sequence data into single cell files according to the single-cell barcodes sequence and the single cell reads were next mapped to reference genome of human (hg38) and mouse (mm10).
 ### Step1: demultiplex
-
 ```
 sh S01_pkubatch_01_demultiplex.sh
 ```
@@ -91,7 +90,6 @@ sh S01_pkubatch_01_demultiplex.sh
 absolute_directiry_of_pass.fastq.gz    pass.fastq.gz
 ```
 pass.fastq.gz is the raw sequencing data from Nanopore platform
-
 ### Step2: trim,align,filter
 ```
 sh S02_pkubatch_02_trim_mapping.sh
@@ -106,47 +104,102 @@ Bc81_Bc03       20221223_LP_221208_C6   GM12878_H3K4me3_T10
 Bc81_Bc04       20221223_LP_221208_C6   GM12878_H3K4me3_T10
 Bc81_Bc05       20221223_LP_221208_C6   GM12878_H3K4me3_T10
 ```
-
 ## 02_clustering
-
+These scripts in the `02_clustering` folder were used to analyse chromatin modification signal of scNanoSeq-CUT&Tag, including extraction of chromatin modification signal; clustering of scNanoSeq-CUT&Tag profiles; generation of genomic coverage track; identification of cell type mark genes.
 ### Step1: prepare files for archr
-Extraction of chromatin modification signal
+Extraction of chromatin modification signal:
 ```
 sh 03_prearchr.sh $antibody
 ```
 ### Step2: Clustering of scNanoSeq-CUT&Tag profiles
 Activating chromatin modification (H3K4me3, H3K27ac, H3K36me3, CTCF, RAD21) parameters was setting as 'minTSS = 1', repressive chromatin modification (H3K27me3, H3K9me3) parameters was setting as 'minTSS = 0.1'.
 ```
-Rscripts 04_archr.R $antibody
+Rscript 04_archr.R $antibody
 ```
+## 03_peak_calling
+These scripts in the `03_peak_calling` folder were used to peak calling. For scNanoSeq-CUT&Tag has a high signal-to-noise ratio, peak calling was performed using SEACR (v1.3).
+```
+sh sbatch_get_fragment_callpeak.sh
+```
+## 04_evaluate_data_quality
+### cross_condamination
+These scripts in the `04_evaluate_data_quality/cross_condamination` folder were used to evaluate human-mouse cross-contamination libraries for scNanoSeq-CUT&Tag.
+```
+sh S02_pkubatch_02_trim_mapping.sh
+```
+```
+head 20230331_GM12878_3T3_H3K4me3_sample.list
+#barcode_name directory new_name
+Bc77_Bc01       20230316_bulk_newRAD21_HumanMouse_cross_C1      GM12878_3T3_H3K4me3
+Bc77_Bc02       20230316_bulk_newRAD21_HumanMouse_cross_C1      GM12878_3T3_H3K4me3
+Bc77_Bc03       20230316_bulk_newRAD21_HumanMouse_cross_C1      GM12878_3T3_H3K4me3
+Bc77_Bc04       20230316_bulk_newRAD21_HumanMouse_cross_C1      GM12878_3T3_H3K4me3
+Bc77_Bc05       20230316_bulk_newRAD21_HumanMouse_cross_C1      GM12878_3T3_H3K4me3
+```
+### optimal_throughput
+These scripts in the `04_evaluate_data_quality/optimal_throughput` folder were used to evaluate the optimal throughput of scNanoSeq-CUT&Tag by downsampling analysis.
+```
+sh qsub_cuttag_for_downsampling.sh
+```
+### reproducibility
+These scripts in the `04_evaluate_data_quality/reproducibility` folder were used to evaluate the correlation among different cell lines with the same antibody and the correlation in one cell line with different antibodies.
+```
+sh get_correlation.sh $cellline
+```
+The bw files were generated using `getGroupBW` in Archr during step 02_clustering.
+## 05_ASPs
+### Identification of ASPs
+These scripts in the `05_ASPs/Identification` folder were used to identify allele-specific chromatin modifications peak from scNanoSeq-CUT&Tag data.
+* step1: Split pat mat reads
+* step2: Subset each reads HetSNPs
+* step3: Filter reads according to HetSNPs and duplicate reads
+* step4: Merge all single cell filter reads
+* step5: Identify allele-specific chromatin modifications peak using `binom.test`
+```
+sh sbatch_pre_ASP_filter_reads.sh
+```
+The input bam files were raw mapping reads without remove duplicate reads, since high error rate of third generation sequencing, we corrected the phasing result of each reads by HetSNPs and duplicate reads.
+```
+Rscript ASP_identification.R
+```
+### Validation of ASPs
+These scripts in the `05_ASPs/Validation` folder were used to validate allele-specific chromatin modifications peak from scNanoSeq-CUT&Tag data using ChIP-seq data from the ENCODE database.
+```
+Rscript ENCODE_validation.R
+```
+## 06_co_peaks
+These scripts in the `06_co_peaks` were used to detect chromatin modification co-occupacy peaks events from scNanoSeq-CUT&Tag data.
+* step1: Find reads directly support peak pair as candidate co-occupacy peak (Such as peak1-peak2;peak1-peak3 )
+* step2: Calculate reads strand and length distribution in each peak (Only save reads length >1kb for calculation)
+* step3: Filter candidate peak pairs:  
+         1. left peak pvalue adj <0.01  
+         2. Right peak pvalue adj <0.01   
+         3. Filter peak length > 1kb (if a peak is so long ,the resolution of its region is poor,it may has many regulatory elements)
+```
+sh sbatch_co_occupancy.sh
+sh qsub_co_occupancy.step2.sh
+```
+## 07_repetitive_elements
+These scripts in the `07_repetitive_elements` were used to compare and detect full-length LINE in human and mouse genome.  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*for human*  
+Based on the third-generation sequencing technology, T2T human reference genome has been assembled and 320 full-length L1Hs have been identified.So for human, we used the T2T reference genome for the analysis of this section. 
+```
+sh L1HS_analysis_pip.sh
+```
+*for mouse*  
+The full-length LINEs of mouse were collected from L1Base.
+```
+sh mouse_mm10_fulllength_LINE1_analysis_pip_L1Md_A.sh
+sh mouse_mm10_fulllength_LINE1_analysis_pip_L1Md_T.sh
+```
+# WGBS pipeline
+These scripts in the `WGBS` were used to analysis whole genome bisulfite sequencing.
+```
+sh qsub_WGBS_pip.sh
+```
+# Contact
+guoyuqing@stu.pku.edu.cn
 
 
 
