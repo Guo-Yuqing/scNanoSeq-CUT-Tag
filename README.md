@@ -92,5 +92,61 @@ absolute_directiry_of_pass.fastq.gz    pass.fastq.gz
 ```
 pass.fastq.gz is the raw sequencing data from Nanopore platform
 
+### Step2: trim,align,filter
+```
+sh S02_pkubatch_02_trim_mapping.sh
+```
+```
+#samdir example
+head GM12878_H3K4me3_T10_sample.list
+#barcode_name directory new_name
+Bc81_Bc01       20221223_LP_221208_C6   GM12878_H3K4me3_T10
+Bc81_Bc02       20221223_LP_221208_C6   GM12878_H3K4me3_T10
+Bc81_Bc03       20221223_LP_221208_C6   GM12878_H3K4me3_T10
+Bc81_Bc04       20221223_LP_221208_C6   GM12878_H3K4me3_T10
+Bc81_Bc05       20221223_LP_221208_C6   GM12878_H3K4me3_T10
+```
+
+## 02_clustering
+
+### Step1: prepare files for archr
+Extraction of chromatin modification signal
+```
+sh 03_prearchr.sh $antibody
+```
+### Step2: Clustering of scNanoSeq-CUT&Tag profiles
+Activating chromatin modification (H3K4me3, H3K27ac, H3K36me3, CTCF, RAD21) parameters was setting as 'minTSS = 1', repressive chromatin modification (H3K27me3, H3K9me3) parameters was setting as 'minTSS = 0.1'.
+```
+Rscripts 04_archr.R $antibody
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
