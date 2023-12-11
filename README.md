@@ -1,5 +1,6 @@
 # scNanoSeq-CUT-Tag
 scNanoSeq-CUT&Tag is a streamlined method by adapting a modified CUT&Tag protocol to Oxford Nanopore sequencing platform for efficient chromatin modification profiling at single-cell resolution. scNanoSeq-CUT&Tag can accurately distinguish different cell types in vitro and in vivo. Moreover, scNanoSeq-CUT&Tag enables to effectively map the allele-specific epigenomic modifications in the human genome and allows to analyze co-occupancy of histone modifications. Taking advantage of long-read sequencing, scNanoSeq-CUT&Tag can sensitively detect epigenomic state of repetitive elements. In addition, by applying scNanoSeq-CUT&Tag to testicular cells of adult mouse B6D2F1, we demonstrated that scNanoSeq-CUT&Tag maps dynamic epigenetic state changes during mouse spermatogenesis.
+
  ![image](https://github.com/Guo-Yuqing/scNanoSeq-CUT-Tag/assets/153424744/b3949a8d-72d8-48fa-acc9-995fce69463a)![image](https://github.com/Guo-Yuqing/scNanoSeq-CUT-Tag/assets/153424744/e6262d93-02e2-4554-a010-f76476fd7cae)
 ```
 ├── scNanoSeq-CUT_Tag
@@ -77,9 +78,19 @@ scNanoSeq-CUT&Tag is a streamlined method by adapting a modified CUT&Tag protoco
     ├── qsub_WGBS_pip.sh
     └── WGBS_pip.sh
 ```
-## 
-
-
+# scNanoSeq-CUT&Tag pipeline
+## 01_preprocess
+These scripts in the 01_preprocess folder were used to demultiplex raw sequence data into single cell files according to the single-cell barcodes sequence and the single cell reads were next mapped to reference genome of human (hg38) and mouse (mm10).
+### Input
+pass.fastq.gz is the raw sequencing data from Nanopore platform
+samdir example:
+```
+raw_fastq_dir  pass.fastq.gz
+```
+### Usage
+```
+sh S01_pkubatch_01_demultiplex.sh
+```
 
 
 
