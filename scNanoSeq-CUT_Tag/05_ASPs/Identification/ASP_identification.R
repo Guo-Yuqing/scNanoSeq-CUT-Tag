@@ -124,8 +124,8 @@ table(result$contig)
 
 #####################################################################################################
 #####################################################################################################
-tmp=result.pl[result.pl$fdr <= cut.off,]
-tmp$per=round(tmp$ratio,1)
+tmp <- result.pl[result.pl$fdr <= cut.off,]
+tmp$per <- round(tmp$ratio,1)
 table(tmp$per)
 
 cut.off <- 5e-2
@@ -209,11 +209,11 @@ dev.off()
 ####################################################################################################################
 cut.off <- 5e-2
 result.pl<-result[order(result$fdr,decreasing = T),]
-tmp=result.pl[result.pl$fdr <= cut.off ,]
-tmp$per=round(tmp$ratio,1)
+tmp <- result.pl[result.pl$fdr <= cut.off ,]
+tmp$per <- round(tmp$ratio,1)
 table(tmp$per)
 
-tmp$peak_name=paste0('SEACRpeak_',tmp$peak)
+tmp$peak_name <- paste0('SEACRpeak_',tmp$peak)
 
 write.table(tmp,'GM12878_TGS_APS_peak_fdr_5e-2_20frag.bed',sep = '\t',quote = F,row.names = F)
 
