@@ -15,7 +15,6 @@ nanoplexer=$rootdir/software/miniconda3/bin/nanoplexer
 seqkit=$rootdir/software/miniconda3/bin/seqkit
 demultiplex_dir=$workdir/01_demultiplex/$batch
 
-
 mkdir -p $demultiplex_dir
 
 # outer barcode
@@ -30,13 +29,13 @@ ls $demultiplex_dir | grep Barcode > file.list
 # inner barcode
 while read fastq
 do
-cell=${fastq%.*}
-Bc=${cell#*e}
-mkdir $cell
-$nanoplexer -b ${barcode_inner} -p $cell -t 8 ${cell}.fastq
-cd $cell
-rename Barcode Bc${Bc}_Bc Barcode*
-cd ..
+         cell=${fastq%.*}
+         Bc=${cell#*e}
+         mkdir $cell
+         $nanoplexer -b ${barcode_inner} -p $cell -t 8 ${cell}.fastq
+         cd $cell
+         rename Barcode Bc${Bc}_Bc Barcode*
+         cd ..
 done < file.list
 
 mv */Bc*fastq ./
