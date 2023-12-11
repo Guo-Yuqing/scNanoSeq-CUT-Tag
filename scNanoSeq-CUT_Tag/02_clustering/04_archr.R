@@ -16,8 +16,8 @@ library(ArchR)
 library(Rsamtools)
 addArchRGenome("hg38")
 
-inputFiles=scanTabix(paste0(antibody,"_6celllines.bed.gz"))
-names(inputFiles)=paste0("LOOP_",antibody)
+inputFiles <- scanTabix(paste0(antibody,"_6celllines.bed.gz"))
+names(inputFiles) <- paste0("LOOP_",antibody)
 ArrowFiles <- createArrowFiles(
   inputFiles = paste0(antibody,"_6celllines.bed.gz"),
   sampleNames = names(inputFiles),
@@ -36,12 +36,12 @@ proj <- ArchRProject(
 ################################################################################################################################################
 ###if the modification are repressive markers:H3K27me3;H3K9me3
 
-tmp=gsub(paste0('LOOP_',antibody,'#'),'',proj$cellNames)
-celltype=sapply(strsplit(tmp,'_'),'[',1)
-proj$celltype=celltype
+tmp <- gsub(paste0('LOOP_',antibody,'#'),'',proj$cellNames)
+celltype <- sapply(strsplit(tmp,'_'),'[',1)
+proj$celltype <- celltype
 
 write.table(tmp,file = 'celllines_filter_TSS0.1_cellname.txt',sep = '\t',quote = F,row.names = F,col.names = F)
-proj1=proj
+proj1 <- proj
 
 ################################################################################################################################################
 ###if the modification are activate markers:H3K4me3;H3K27ac;H3K36me3;CTCF;RAD21
@@ -50,9 +50,9 @@ proj1=proj
  cellsPass <- proj$cellNames[idxPass]
  proj1<- proj[cellsPass, ]
 
-tmp=gsub(paste0('LOOP_',antibody,'#'),'',proj1$cellNames)
-celltype=sapply(strsplit(tmp,'_'),'[',1)
-proj1$celltype=celltype
+tmp <- gsub(paste0('LOOP_',antibody,'#'),'',proj1$cellNames)
+celltype <- sapply(strsplit(tmp,'_'),'[',1)
+proj1$celltype <- celltype
 
 write.table(tmp,file = 'celllines_filter_TSS1_cellname.txt',sep = '\t',quote = F,row.names = F,col.names = F)
 
@@ -82,7 +82,7 @@ proj1 <- addUMAP(
 )
 
 ################################################################################################################################################
-color = c("#E41A1C","#0072B5FF",
+color <- c("#E41A1C","#0072B5FF",
           "#4DAF4A",
           "#B45DC2",
           "#FF7F00",
@@ -109,7 +109,7 @@ saveArchRProject(ArchRProj = proj1, outputDirectory = "Save-Proj1", load = FALSE
 
 proj1 <- addImputeWeights(proj1)
 
-p=plotEmbedding(
+p <- plotEmbedding(
   ArchRProj = proj1, size = 3,
   colorBy = "GeneScoreMatrix", 
   name = c( "GAPDH","BCR","GATA1","PRAME","HBG1","BGLT3","HBG2", #K562  
