@@ -15,7 +15,6 @@ cellname=$workdir/downsample_cell_${prefix}
 
 for sample in K562 GM12878 H9 HFF1 293T HG002
 do 
-
     less $cellname|grep ${sample}|while read cell
     do    
         less $workdir/${sample}_${prefix}_merge_all_cell.rmdup_fragments.site.bed| \
