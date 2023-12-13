@@ -87,7 +87,7 @@ sh S01_pkubatch_01_demultiplex.sh
 ```
 ```
 #samdir example
-absolute_directiry_of_pass.fastq.gz    pass.fastq.gz
+absolute_directory_of_pass.fastq.gz    pass.fastq.gz
 ```
 pass.fastq.gz is the raw sequencing data from Nanopore platform
 ### Step2: trim,align,filter
