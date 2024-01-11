@@ -81,33 +81,33 @@ scNanoSeq-CUT&Tag is a streamlined method by adapting a modified CUT&Tag protoco
     └── WGBS_pip.sh
 ```
 # Requirements
-Please have the following softwares installed first:
-```
-###scNanoSeq-CUT&Tag
-nanoplexer (v0.1) <https://github.com/hanyue36/nanoplexer>
-NanoFilt (v2.8.0) 
-cutadapt (v3.5)
-minimap (v2.26-r1175)
-samtools (v1.3)
-bedtools (v2.30.0)
-SEACR (v1.3) 
-deepTools (v3.5.1)
-whatshap (v1.6)
-blast (v2.5.0)
-GenMap (v1.3.0)
-ArchR (v1.0.1)
+### Please have the following softwares installed first:
+### scNanoSeq-CUT&Tag
+`nanoplexer (v0.1)` <https://github.com/hanyue36/nanoplexer>  <br>
+`NanoFilt (v2.8.0)`  <https://github.com/wdecoster/nanofilt>  <br>
+`cutadapt (v3.5)` <https://github.com/marcelm/cutadapt/>  <br>
+`minimap2 (v2.26-r1175)` <https://github.com/lh3/minimap2>  <br>
+`samtools (v1.3)`  <https://github.com/samtools/samtools>  <br>
+`bedtools (v2.30.0)` <https://github.com/arq5x/bedtools2/>  <br>
+`SEACR (v1.3)` <https://github.com/FredHutch/SEACR>  <br>
+`deepTools (v3.5.1)` <https://github.com/deeptools/deepTools>  <br>
+`whatshap (v1.6)` <https://github.com/whatshap/whatshap>  <br>
+`blast (v2.5.0)` <https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html>  <br>
+`GenMap (v1.3.0)` <https://github.com/cpockrandt/genmap>  <br>
+`ArchR (v1.0.1)` <https://github.com/GreenleafLab/ArchR/releases>  <br> 
 
 (and all the packages declared at the head of R scripts...)
 
-###NGS WGS
-fastp (v0.23.0)
-bwa mem (v0.7.17)
-sambamba (v1.0.0)
+### NGS WGS
+`fastp (v0.23.0)` <https://github.com/OpenGene/fastp>  <br>
+`bwa mem (v0.7.17)` <https://github.com/bwa-mem2/bwa-mem2>  <br>
+`sambamba (v1.0.0)` <https://github.com/biod/sambamba>  <br>
 
-###NGS WGBS
-bismark (v0.23.1)
+### NGS WGBS
+`bismark (v0.23.1)` <https://github.com/FelixKrueger/Bismark/>  <br> 
 
-```
+All of the softwares can be installed with conda or link.
+
 
 # scNanoSeq-CUT&Tag pipeline
 ## 01_preprocess
