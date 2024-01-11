@@ -149,7 +149,7 @@ For active chromatin marks (H3K4me3, H3K27ac, H3K36me3, CTCF, RAD21), the parame
 Rscript 04_archr.R $antibody
 ```
 ## 03_peak_calling
-These scripts in the `03_peak_calling` folder were used to peak calling. For scNanoSeq-CUT&Tag has a high signal-to-noise ratio, peak calling was performed using SEACR (v1.3).
+These scripts in the `03_peak_calling` folder were used to peak calling. For scNanoSeq-CUT&Tag has a high signal-to-noise ratio, peak calling was performed using SEACR (v1.3) with parameters 'non stringent 0.05'. To further improve the precision of peak calling, we retained the peaks supported by at least (1.5% * No. of total cells) cells, setting a minimum threshold of 5 cells for support. .
 ```
 sh sbatch_get_fragment_callpeak.sh
 ```
@@ -201,8 +201,8 @@ Rscript ENCODE_validation.R
 ```
 ## 06_co_peaks
 These scripts in the `06_co_peaks` were used to detect chromatin modification co-occupacy peaks events from scNanoSeq-CUT&Tag data.
-* step1: Find reads directly support peak pair as candidate co-occupacy peak (Such as peak1-peak2;peak1-peak3 )
-* step2: Calculate reads strand and length distribution in each peak (Only save reads length >1kb for calculation)
+* step1: Find reads directly support peak pair as candidate co-occupancy peak (Such as peak1-peak2; peak1-peak3 )
+* step2: Calculate reads strand and length distribution in each peak (Only save reads length >1 kb for calculation)
 * step3: Filter candidate peak pairs:  
          1. left peak pvalue adj <0.01  
          2. Right peak pvalue adj <0.01   
@@ -225,6 +225,12 @@ The full-length LINEs of mouse were collected from L1Base.
 sh mouse_mm10_fulllength_LINE1_analysis_pip_L1Md_A.sh
 sh mouse_mm10_fulllength_LINE1_analysis_pip_L1Md_T.sh
 ```
+## 08_mouse_spermatogenesis
+These scripts in the `08_mouse_spermatogenesis` were used to analyse the dynamic epigenetic state changes during mouse spermatogenesis.  
+```
+Rscript mouse_spermatogenesis_analysis.r
+```
+
 # WGBS pipeline
 These scripts in the `WGBS` were used to analysis whole genome bisulfite sequencing.
 ```
