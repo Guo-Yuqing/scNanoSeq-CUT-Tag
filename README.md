@@ -84,8 +84,8 @@ scNanoSeq-CUT&Tag is a streamlined method by adapting a modified CUT&Tag protoco
 Please have the following softwares installed first:
 ```
 ###scNanoSeq-CUT&Tag
-nanoplexer (v0.1)
-NanoFilt (v2.8.0)
+nanoplexer (v0.1) <https://github.com/hanyue36/nanoplexer>
+NanoFilt (v2.8.0) 
 cutadapt (v3.5)
 minimap (v2.26-r1175)
 samtools (v1.3)
