@@ -42,42 +42,73 @@ scNanoSeq-CUT&Tag is a streamlined method by adapting a modified CUT&Tag protoco
 │   │   ├── qsub_co_occupancy.step2.sh
 │   │   ├── sbatch_co_occupancy.sh
 │   │   └── summary_coa.R
-│   └── 07_repetitive_elements
-│       ├── human_L1HS
-│       │   ├── build_blast_diff_matrix_minus.sh
-│       │   ├── build_blast_diff_matrix.plus.sh
-│       │   ├── L1HS_analysis_pip.sh
-│       │   ├── motif_ref_query_diff.new.R
-│       │   └── T2T_fulllengthL1HS.trans.chrm13v2.0.txt
-│       ├── human_L1HS_judgeable
-│       │   ├── NGS_WGS
-│       │   │   ├── get_bin_bulk.sh
-│       │   │   ├── GIAB_12878_WGS_Unique_mapping_count.sh
-│       │   │   └── S01_pkubatch_GIAB_12878_WGS_Unique_mapping.sh
-│       │   └── TGS_scNanoSeq-CUT_Tag
-│       │       └── get_L1HS_300bp_bin.sh
-│       ├── mouse_fill-length_LINE
-│       │   ├── L1Md_A
-│       │   │   ├── AY053456.fasta
-│       │   │   ├── build_blast_diff_matrix_minus.sh
-│       │   │   ├── build_blast_diff_matrix.plus.sh
-│       │   │   ├── motif_ref_query_diff.new.R
-│       │   │   └── mouse_mm10_fulllength_LINE1_analysis_pip_L1Md_A.sh
-│       │   └── L1Md_T
-│       │       ├── AF016099.ORF1_ORF2.fasta
-│       │       ├── build_blast_diff_matrix_minus.sh
-│       │       ├── build_blast_diff_matrix.plus.sh
-│       │       ├── motif_ref_query_diff.new.R
-│       │       └── mouse_mm10_fulllength_LINE1_analysis_pip_L1Md_T.sh
-│       └── mouse_fill-length_LINE_judgeable
-│           ├── NGS_WGS
-│           │   └── get_MGP_data.sh
-│           └── TGS_scNanoSeq-CUT_Tag
-│               └── get_cuttag_data.sh
+│   ├── 07_repetitive_elements
+│   │   ├── human_L1HS
+│   │   │   ├── build_blast_diff_matrix_minus.sh
+│   │   │   ├── build_blast_diff_matrix.plus.sh
+│   │   │   ├── L1HS_analysis_pip.sh
+│   │   │   ├── motif_ref_query_diff.new.R
+│   │   │   └── T2T_fulllengthL1HS.trans.chrm13v2.0.txt
+│   │   ├── human_L1HS_judgeable
+│   │   │   ├── NGS_WGS
+│   │   │   │   ├── get_bin_bulk.sh
+│   │   │   │   ├── GIAB_12878_WGS_Unique_mapping_count.sh
+│   │   │   │   └── S01_pkubatch_GIAB_12878_WGS_Unique_mapping.sh
+│   │   │   └── TGS_scNanoSeq-CUT_Tag
+│   │   │       └── get_L1HS_300bp_bin.sh
+│   │   ├── mouse_fill-length_LINE
+│   │   │   ├── L1Md_A
+│   │   │   │   ├── AY053456.fasta
+│   │   │   │   ├── build_blast_diff_matrix_minus.sh
+│   │   │   │   ├── build_blast_diff_matrix.plus.sh
+│   │   │   │   ├── motif_ref_query_diff.new.R
+│   │   │   │   └── mouse_mm10_fulllength_LINE1_analysis_pip_L1Md_A.sh
+│   │   │   └── L1Md_T
+│   │   │       ├── AF016099.ORF1_ORF2.fasta
+│   │   │       ├── build_blast_diff_matrix_minus.sh
+│   │   │       ├── build_blast_diff_matrix.plus.sh
+│   │   │       ├── motif_ref_query_diff.new.R
+│   │   │       └── mouse_mm10_fulllength_LINE1_analysis_pip_L1Md_T.sh
+│   │   └── mouse_fill-length_LINE_judgeable
+│   │       ├── NGS_WGS
+│   │       │   └── get_MGP_data.sh
+│   │       └── TGS_scNanoSeq-CUT_Tag
+│   │           └── get_cuttag_data.sh
+│   └── 08_mouse_spermatogenesis
+│       └── mouse_spermatogenesis_analysis.r
 └── WGBS
     ├── qsub_WGBS_pip.sh
     └── WGBS_pip.sh
 ```
+# Requirements
+Please have the following softwares installed first:
+```
+###scNanoSeq-CUT&Tag
+nanoplexer (v0.1)
+NanoFilt (v2.8.0)
+cutadapt (v3.5)
+minimap (v2.26-r1175)
+samtools (v1.3)
+bedtools (v2.30.0)
+SEACR (v1.3) 
+deepTools (v3.5.1)
+whatshap (v1.6)
+blast (v2.5.0)
+GenMap (v1.3.0)
+ArchR (v1.0.1)
+
+(and all the packages declared at the head of R scripts...)
+
+###NGS WGS
+fastp (v0.23.0)
+bwa mem (v0.7.17)
+sambamba (v1.0.0)
+
+###NGS WGBS
+bismark (v0.23.1)
+
+```
+
 # scNanoSeq-CUT&Tag pipeline
 ## 01_preprocess
 These scripts in the `01_preprocess` folder were used to demultiplex raw sequence data into single cell files according to the single-cell barcodes sequence and the single cell reads were next mapped to reference genome of human (hg38) and mouse (mm10).
@@ -87,10 +118,11 @@ sh S01_pkubatch_01_demultiplex.sh
 ```
 ```
 #samdir example
-absolute_directory_of_pass.fastq.gz    pass.fastq.gz
+#absolute_directory_of_pass.fastq.gz    subfolder_containing_fastq_file
+/gpfs1/tangfuchou_pkuhpc/tangfuchou_test/guoyuqing/scnanoseqcuttag/20221223_LP_221208_C6/pass.fastq.gz 20221223_LP_221208_C6
 ```
 pass.fastq.gz is the raw sequencing data from Nanopore platform
-### Step2: trim,align,filter
+### Step2: trim, align, filter
 ```
 sh S02_pkubatch_02_trim_mapping.sh
 ```
@@ -112,7 +144,7 @@ Extraction of chromatin modification signal:
 sh 03_prearchr.sh $antibody
 ```
 ### Step2: Clustering of scNanoSeq-CUT&Tag profiles
-Activating chromatin modification (H3K4me3, H3K27ac, H3K36me3, CTCF, RAD21) parameters was setting as 'minTSS = 1', repressive chromatin modification (H3K27me3, H3K9me3) parameters was setting as 'minTSS = 0.1'.
+For active chromatin marks (H3K4me3, H3K27ac, H3K36me3, CTCF, RAD21), the parameters were setting as 'minTSS = 1'. For repressive chromatin marks (H3K27me3, H3K9me3), the parameters were setting as 'minTSS = 0.1'. 
 ```
 Rscript 04_archr.R $antibody
 ```
@@ -174,7 +206,7 @@ These scripts in the `06_co_peaks` were used to detect chromatin modification co
 * step3: Filter candidate peak pairs:  
          1. left peak pvalue adj <0.01  
          2. Right peak pvalue adj <0.01   
-         3. Filter peak length > 1kb (if a peak is so long ,the resolution of its region is poor,it may has many regulatory elements)
+         3. Filter peak length > 1 kb (if a peak is long ,the resolution is poor, it may has many regulatory elements)
 ```
 sh sbatch_co_occupancy.sh
 sh qsub_co_occupancy.step2.sh
@@ -183,7 +215,7 @@ sh qsub_co_occupancy.step2.sh
 These scripts in the `07_repetitive_elements` were used to compare and detect full-length LINE in human and mouse genome.  
 
 *for human*  
-Based on the third-generation sequencing technology, T2T human reference genome has been assembled and 320 full-length L1Hs have been identified.So for human, we used the T2T reference genome for the analysis of this section. 
+Based on the third-generation sequencing technology, T2T human reference genome has been assembled and 320 full-length L1Hs have been identified. So for human, we used the T2T reference genome for the analysis of this section. 
 ```
 sh L1HS_analysis_pip.sh
 ```
