@@ -3,7 +3,7 @@
  # @Descripttion:scNanoSeq-CUT&Tag co-occupancy
  # @version:
  # @Date: 2023-6-24 22:35:11
- # @LastEditors: Yuqing Guo
+ # @LastEditors:
  # @LastEditTime: 2023-6-24 22:35:20
 ###
 argv <- commandArgs(TRUE)
