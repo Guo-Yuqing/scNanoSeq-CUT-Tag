@@ -83,7 +83,7 @@ if (T) {
         
       }
       
-      peak_pair <- peak_pair[peak_pair$left_judge<0.01 & peak_pair$right_judge<0.01  & peak_pair$V3-peak_pair$V2<=1000 &peak_pair$V9-peak_pair$V8<=1000 ,]
+      peak_pair <- peak_pair[peak_pair$left_judge<0.01 & peak_pair$right_judge<0.01  & peak_pair$V3-peak_pair$V2<=1500 &peak_pair$V9-peak_pair$V8<=1500 ,]
       peak_pair <- na.omit(peak_pair)
 
 
@@ -93,80 +93,11 @@ if (T) {
       # generate a GenomicInteraction object
       gi <- GInteractions(sig.left.index, sig.right.index, peaks.chr)
       
-      coa <- data.frame(
-        span = pairdist(gi),
-        left.end = peak.test[sig.left.index,]$left.length,
-        right.end = peak.test[sig.right.index,]$right.length,
-        left.control = peak.test[sig.left.index, ]$left.control,
-        right.control = peak.test[sig.right.index, ]$right.control
-      ) %>%
-        mutate(
-          left.spring = left.end / left.control,
-          right.spring = right.end / right.control,
-          res = span / left.end
-        )
-
-      if (is.null(gi.clean)){
-        gi.clean<-gi[coa$res<2]
-      }else{
-        gi.clean<-c(gi.clean,gi[coa$res<2])
-      }
-      
-      if (is.null(coa.all)){
-        coa.all<-coa
-      }else{
-        coa.all<-rbind(coa.all,coa)
-      }
-    }
     
-    export.bedpe(gi.clean,
+    export.bedpe(gi,
                  paste0("../coa_bedpe/",cell.type,"_",modification,'_co-occupancy.bedpe'))
     
-    # density plot of span ~ linkage
-    {
-      set.seed(1)
-      
-      df <- data.frame(
-        log10.span = log10(coa.all$span),
-        log10.left.end = log10(coa.all$left.end),
-        log10.res = log10(coa.all$res)
-      ) 
-      
-      df$density <-
-        get_density(df$log10.span,
-                    df$log10.left.end,
-                    n = 100)
-      
-      pdf(paste0("../coa_bedpe/",cell.type,"_",modification,'.span_relationship.pdf'),
-          width = 7, height = 7)
-      
-      # color by density
-      p <- ggplot(df,aes(x=log10.span, y=log10.left.end, color = density)) +
-        geom_point() +
-        stat_density2d(h = c(0.5,0.05), color='grey90') +
-        geom_hline(yintercept = median(log10(coa.all$right.control))) +
-        geom_abline(slope = 1,intercept = -log10(2))+
-        scale_color_viridis()+
-        coord_fixed(ratio=diff(range(df$log10.span))/diff(range(df$log10.left.end)))+
-        theme_bw()
-      
-      plot(p)
-      
-      df <-
-        rbind(
-          data.frame(dist = peaks %>% start %>% diff, group = 'nanoCuttag_peak_distance'),
-          data.frame(dist = coa.all$left.end, group = 'median_peak_read_length'),
-          data.frame(dist = coa.all$span[coa.all$res<2], group = 'co-occupancy_span \n (res < 2-fold)')
-        )
-      
-      p <- ggplot(data = df, aes(log10(dist), fill = group)) +
-        geom_density(alpha = .5) +
-        geom_vline(xintercept = median(log10(coa.all$left.control)))+
-        theme_bw()
-      
-      plot(p)
-      
-      dev.off()
+
     }
   }
 
