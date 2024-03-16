@@ -94,7 +94,7 @@ worker <- function(i) {
 result <- mclapply(seq_along(peaks.chr), worker, mc.cores = cores)
 
 # foramt hypothesis test results
-peak.test <- data.frame(
+tmp <- data.frame(
   chr = seqnames(peaks.chr),
   start = start(peaks.chr),
   end = end(peaks.chr),
@@ -106,6 +106,9 @@ peak.test <- data.frame(
   right.control = sapply(result, function(x) x[['+']][3])
 ) %>%
   mutate(left.p.val.adj=p.adjust(left.p.val,method = 'fdr'),
+         right.p.val.adj=p.adjust(right.p.val,method = 'fdr'))
+tmp[is.na(tmp)]=1
+peak.test=tmp %>%  mutate(left.p.val.adj=p.adjust(left.p.val,method = 'fdr'),
          right.p.val.adj=p.adjust(right.p.val,method = 'fdr'))
 
 saveRDS(peak.test, paste0('scNanoCuttag_',cell.type,"_",modification,'_',chrom,'.co-occupancy.ks.Rds')) 
